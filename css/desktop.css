@@ -1,0 +1,217 @@
+*, *::after, *::before {
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;
+}
+
+#background {
+    background-image: url(../img/wallpapers/Background-Images-4H9.jpg);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+    left: 0;
+    top: 0;
+}
+
+#desktop {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 46px;
+    width: calc(100% - 52px);
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    padding-left: 52px;
+}
+
+.taskbar .launcher {
+}
+
+.taskbar .launcher .launcher_drawer {
+    position: absolute;
+    left: 0;
+    bottom: 46px;
+    background: rgba(0, 0, 0, 0.91);
+    width: 450px;
+    overflow: hidden;
+    height: 0;
+
+    -webkit-transition: all 80ms;
+    -moz-transition: all 80ms;
+    -ms-transition: all 80ms;
+    -o-transition: all 80ms;
+    transition: all 80ms;
+}
+
+.taskbar .launcher.open .launcher_drawer {
+    height: 80vh;
+}
+
+.taskbar .launcher .launcher_trigger {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 52px;
+    height: 100%;
+    /* background-color: #000; */
+    background-image: url(../img/icons/launcher2.svg);
+    background-repeat: no-repeat;
+    background-size: 24px;
+    background-position: 50% 50%;
+}
+
+.taskbar .launcher.open .launcher_trigger {
+    background-color: #000;
+}
+
+.taskbar_apps {
+    flex: 1;
+}
+
+.taskbar_clock {
+    width: 100px;
+    border-left: 1px solid #3e3e3ea1;
+    text-align: center;
+    font-size: 13px;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: default;
+}
+
+span.tc_time {
+    text-align: center;
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+body {
+    color: #e8e8e8;
+    font-family: sans-serif;
+}
+
+span.tc_date {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.66);
+}
+
+.taskbar .launcher.open .launcher_trigger::after {
+    content: ' ';
+    /* background: #fff; */
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.taskbar_try {
+    max-width: 120px;
+    display: flex;
+    /* margin-right: 8px; */
+}
+
+.taskbar_try > div::after {
+    content: ' ';
+}
+
+.taskbar_try > div.open::after {
+    content: ' ';
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    /* background: #000; */
+}
+
+.taskbar_try > div.open {
+    background-color: rgba(255, 255, 255, 0.1607843137254902);
+}
+
+.taskbar_try > div {
+    width: 42px;
+    /* background-image: url(../img/icons/bell2.svg); */
+    /* background-color: #5f5a5a; */
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    position: relative;
+}
+
+.taskbar_try > div:hover {
+    background-color: rgba(255, 255, 255, 0.1607843137254902);
+}
+
+.tbt_notifications {
+    background-image: url(../img/icons/bell2.svg);
+}
+
+.tbt_notifs {
+    position: absolute;
+    z-index: 9;
+    left: 50%;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.27);
+    margin-left: -240px;
+    border-radius: 4px;
+    bottom: 0;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+
+    -webkit-transition: all 80ms;
+    -moz-transition: all 80ms;
+    -ms-transition: all 80ms;
+    -o-transition: all 80ms;
+    transition: all 80ms;
+}
+
+.open .tbt_notifs {
+    bottom: 64px;
+    opacity: 1;
+    height: 116px;
+    overflow: visible;
+}
+
+.tbt_notifs > p {
+    text-align: center;
+    margin-bottom: 32px;
+    margin-top: 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.tbt_notifs > img {
+    width: 24px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 32px;
+}
+
+.tbt_notifs::after {
+    content: ' ';
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    bottom: -16px;
+    right: 12px;
+    border: 8px solid transparent;
+    box-sizing: border-box;
+    border-top: 8px solid rgba(255, 255, 255, 0.27);
+}
