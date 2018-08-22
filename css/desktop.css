@@ -25,10 +25,12 @@
     height: 100%;
     top: 0;
     left: 0;
+    user-select: none;
 }
 
 .taskbar {
     position: fixed;
+    z-index: 9;
     bottom: 0;
     left: 0;
     height: 46px;
@@ -43,24 +45,30 @@
 
 .taskbar .launcher .launcher_drawer {
     position: absolute;
+    z-index: 0;
     left: 0;
     bottom: 46px;
-    background: rgba(0, 0, 0, 0.91);
+    background: rgba(0, 0, 0, 0.87);
     width: 450px;
     overflow: hidden;
+    /* border: 2px solid #000; */
+    /* box-sizing: border-box; */
     height: 0;
-
     -webkit-transition: all 80ms;
     -moz-transition: all 80ms;
     -ms-transition: all 80ms;
     -o-transition: all 80ms;
     transition: all 80ms;
+    box-shadow: 5px -1px 20px rgba(0, 0, 0, 0.41);
 }
 
 .taskbar .launcher.open .launcher_drawer {
     height: 80vh;
 }
 
+.taskbar .launcher .launcher_trigger:hover {
+    background-color: rgba(255, 255, 255, 0.11);
+}
 .taskbar .launcher .launcher_trigger {
     position: absolute;
     left: 0;
@@ -75,7 +83,7 @@
 }
 
 .taskbar .launcher.open .launcher_trigger {
-    background-color: #000;
+    background-color: rgba(255, 255, 255, 0.42);
 }
 
 .taskbar_apps {
@@ -214,4 +222,220 @@ span.tc_date {
     border: 8px solid transparent;
     box-sizing: border-box;
     border-top: 8px solid rgba(255, 255, 255, 0.27);
+}
+
+.ld_apps {
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+}
+.ld_apps > div {
+    display: inline-block;
+    vertical-align: top;
+    width: 82px;
+    height: 82px;
+    /* margin: 2px; */
+    padding: 4px;
+}
+.ld_apps > div:hover {
+    background-color: rgba(90, 90, 90, 0.49);
+}
+.ld_apps > div.running::after {}
+.ld_apps > div span {
+    display: block;
+    width: 100%;
+    height: 80%;
+    /* background-color: #fff; */
+    border-radius: 100%;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: 48%;
+    background-position: 50%;
+}
+.ld_apps > div label {
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    /* background: #000; */
+    border-radius: 4px;
+    padding: 2px 2px;
+}
+.ld_apps > div:hover span {
+    /* background-color: #fff; */
+}
+.ld_apps > div:hover label {}
+
+.desktop_shortcuts {
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.ds_app {
+    display: inline-block;
+    width: 82px;
+    height: 82px;
+    vertical-align: top;
+    position: relative;
+    padding: 4px;
+    /* border-radius: 4px; */
+}
+.ds_app::after {
+    content: ' ';
+    height: 16px;
+    width: 16px;
+    background: url(../img/icons/back-arrow.svg);
+    position: absolute;
+    left: 16px;
+    top: 20px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-position: 50%;
+    transform: rotate(180deg);
+}
+.ds_app > span {
+    display: block;
+    width: 100%;
+    height: 80%;
+    /* background-color: #fff; */
+    border-radius: 100%;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: 48%;
+    background-position: 50%;
+}
+.ds_app > label {
+    font-size: 11px;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    /* background: #000; */
+    border-radius: 4px;
+    padding: 2px 2px;
+}
+.ds_app::before {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: #ffffffad;
+    border-radius: 3px;
+    transform: scale(0);
+    opacity: 0;
+}
+.ds_app:hover::before {transform: scale(1);opacity: .2;}
+
+.splash_screen {
+    position: fixed;
+    z-index: 99;
+    background: linear-gradient(13deg, rgba(202, 200, 200, 0.69), rgba(255, 255, 255, 0.81));
+    bottom: 10%;
+    left: 50%;
+    width: 260px;
+    height: 400px;
+    margin-left: -130px;
+    border-radius: 3px;
+    box-shadow: 0 0 32px -6px #000;
+    opacity: 0;
+    -webkit-transition: all .6s;
+    -moz-transition: all .6s;
+    -ms-transition: all .6s;
+    -o-transition: all .6s;
+    transition: all .6s;
+}
+.splash_screen.shown {
+    bottom: 16%;
+    opacity: 1;
+}
+.splash_screen > span {
+    display: block;
+    width: 100%;
+    height: 80%;
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-position: 50% 20%;
+}
+.splash_screen > label {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+}
+
+.window {
+    position: fixed;
+    top: 4%;
+    display: flex;
+    flex-direction: column;
+    left: 12%;
+    /* background: #ccc; */
+    width: 64%;
+    height: 54%;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 2px 20px -6px #000;
+}
+.window.max {}
+.window.min {}
+.window.topmust {}
+.window .control {
+    display: flex;
+    height: 30px;
+    background: rgba(37, 37, 37, 0.97);
+    padding-left: 36px;
+    align-items: center;
+}
+.window .control > img {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 8px;
+    top: 6px;
+}
+.window .control > label {
+    flex: 1;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #d2d2d2;
+}
+.window .control > span {
+    height: 100%;
+    display: flex;
+    border-radius: 0 0 2px 2px;
+    overflow: hidden;
+    padding-bottom: 34px;
+}
+.window .control > span i {
+    width: 27px;
+    border-left: 1px solid #2b2626;
+}
+.window .control > span i.winc_max {
+    background: #4e484a;
+}
+.window .control > span i.winc_min {
+    background: #4e484a;
+}
+.window .control > span i.winc_close {
+    background: #4e484a;
+}
+.window .control > span i.winc_max:hover {
+    background: #649ca2;
+}
+.window .control > span i.winc_min:hover {
+    background: #88c0c5;
+}
+.window .control > span i.winc_close:hover {
+    background: #d88484;
+}
+.window .win_inner {
+    background: #fff;
+    flex: 1;
 }
