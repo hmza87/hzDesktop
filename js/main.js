@@ -10,6 +10,8 @@ var settings = {
         window_left : '20%',
         window_top : '20%'
     },
+    tasks = [],
+    notifications = [],
     apps = [
         {
             name : 'System Info',
@@ -97,6 +99,10 @@ $(document)
     .on('click', '.winc_max', function(){
         toggleWindowSize($(this).closest('.window'));
     })
+    .on('click', '.notifications_dimiss', function(){
+        $('.desktop_notif').find('i').trigger('click');
+        handleNotificationsDismiss();
+    })
 
 
 
@@ -125,7 +131,6 @@ function loadApps(){
         app_template = $('<div data-app><span></span><label></label></div>');
 
     $.each(apps, function(i, app){
-        log(app, lapps);
         var _app = app_template.clone();
         _app
             .attr('data-app', app.package)
@@ -141,7 +146,7 @@ function refreshDesktop(){
 
     $.each(desktop.shortcuts, function(i, short){
         var sh = short_app_template.clone();
-        log(short);
+
         sh
             .attr('data-shortcut', short.app)
             .find('span').css('background-image', 'url('+ getAppByPackage(short.app).icon +')').end()
@@ -160,12 +165,13 @@ function getAppByPackage(pckg){
     });
     return ret;
 }
-function openContentWindow(data, app) {
+function openContentWindow(data, app, pid) {
+    var title = $(data).data('title' || app.name);
 
-    openWindow(getWindowTemplate()
+    openWindow(getWindowTemplate(pid)
         .attr('data-src-app', app.package)
         .find('img').attr('src', app.icon).attr('alt', app.name + ' icon').end()
-        .find('.control label').html(app.name).end()
+        .find('.control label').html(title).end()
         .find('.win_inner').html(data).end());
 
 
@@ -182,6 +188,7 @@ function openWindow(_window){
             height : preferences.window_height,
         })
         .appendTo('#desktop');
+    tasks.push(_window);
     setTimeout(function(){
         _window.css({opacity : 1, transform: 'scale(1)' })
     })
@@ -214,22 +221,28 @@ function toggleWindowSize(win){
 function closeWindow(_window){
     if(typeof _window === 'string') _window = $('[data-window="'+_window+'"]');
 
+    $.each(tasks, function(i, task){
+        if(task.data('window') === _window.data('window'))
+            tasks.splice(i, 1);
+    });
     _window.css({opacity : 0, transform: 'scale(.2)' });
     setTimeout(function(){
         _window.remove();
     }, 400);
+    markAppClosed(getAppByPackage(_window.attr('data-src-app')))
 }
-function getWindowTemplate(){
+function getWindowTemplate(pid){
     var window = $('<div class="window" data-window>' +
         '<div class="control"><img src="" alt=""><label></label><span><i class="winc_min"></i><i class="winc_max"></i><i class="winc_close"></i></span></div><div class="win_inner"></div></div>');
 
-    return window.clone().attr('data-window', random(5, 'window_'));
+    return window.clone().attr('data-window', (pid || random(5, 'PID_')));
 }
 function launchApp(pckg){
     var app = getAppByPackage(pckg);
     if(app.package === '') return false;
 
     var splash = $('<div class="splash_screen"><span></span><label></label></div>');
+    var PID = random(5, 'PID_');
 
     splash
         .find('span').css('background-image', 'url('+ app.icon +')').end()
@@ -238,11 +251,13 @@ function launchApp(pckg){
     setTimeout(function(){splash.addClass('shown')}, 2);
     cleanDrops();
 
+    markAppRunning(app);
+    tasks.push(splash);
 
 
     $
-        .get(sys_url + packages_dir + app.package.split('.').join('/') + '.html', function(data){
-            openContentWindow(data, app);
+        .get(sys_url + packages_dir + app.package.split('.').join('/') + '.html#' + PID, function(data){
+            openContentWindow(data, app, PID);
         })
         .always(function(){
             splash.fadeOut('fast', function(){
@@ -250,11 +265,19 @@ function launchApp(pckg){
             });
         })
         .fail(function(){
-            alert('cant run this app');
+            notify(app, 'Cannot run this app. 404');
+            markAppClosed(app);
         })
 
 
 
+}
+function markAppRunning(app){
+    log('marking ' + app.package);
+    $('[data-app="'+ app.package +'"], [data-shortcut="'+ app.package +'"]').addClass('running');
+}
+function markAppClosed(app){
+    $('[data-app="'+ app.package +'"], [data-shortcut="'+ app.package +'"]').removeClass('running');
 }
 function cleanDrops(){
     $('.open').removeClass('open');
@@ -272,4 +295,51 @@ function random(length, prefix, suffix) {
         ret += str.charAt(rnd(0, str.length - 1));
     }
     return prefix + ret + suffix;
+}
+
+function notify(app, text, title, icon, action, timeOut){
+    var notification = $('<div class="desktop_notif"><i>X</i><a href="#"><span></span><h3></h3><p></p></a></div>');
+
+    notification
+        .find('a').attr('href', action || '#').on('click', function(){
+            $(this).parent().find('i').click();
+        }).end()
+        .find('span').css('background-image', 'url('+(icon || app.icon)+')').end()
+        .find('h3').html(title || app.name).end()
+        .find('p').html(text || '').end()
+        .css('bottom', 60 + ($('.desktop_notif').length * 80))
+        .find('i').on('click', function(){
+            notification.css('bottom', -160).animate({
+                opacity : 0
+            }, 200, function(){
+                $(this).remove();
+            })
+        }).end()
+        .appendTo('#desktop');
+
+    setTimeout(function(){
+        notification.find('i').click();
+        handleNotificationsDismiss();
+    }, timeOut || 2000000);
+
+    handleNotificationsDismiss();
+
+
+    notifications.push({
+        app : app.package,
+        notification : notification
+    });
+}
+
+function handleNotificationsDismiss(){
+    var notifs = $('.desktop_notif'),
+        dismiss = $('.notifications_dimiss');
+
+    if(notifs.length > 2 && dismiss.length === 0){
+        $('#desktop').append('<div class="notifications_dimiss"><i></i></div>')
+    }else if(notifs.length < 2){
+        dismiss.remove();
+    }else{
+        setTimeout(handleNotificationsDismiss, 200)
+    }
 }

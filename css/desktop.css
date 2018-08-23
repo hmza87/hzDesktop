@@ -275,6 +275,16 @@ span.tc_date {
     width: 100%;
     height: 100%;
 }
+.ds_app.running span::before{
+    content : ' ';
+    background: red;
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    position: absolute;
+    right: 22%;
+    bottom: 16%;
+}
 .ds_app {
     display: inline-block;
     width: 82px;
@@ -307,6 +317,7 @@ span.tc_date {
     background-repeat: no-repeat;
     background-size: 48%;
     background-position: 50%;
+    position: relative;
 }
 .ds_app > label {
     font-size: 11px;
@@ -438,4 +449,104 @@ span.tc_date {
 .window .win_inner {
     background: #fff;
     flex: 1;
+}
+
+.desktop_notif {
+    position: fixed;
+    bottom: 60px;
+    right: 8%;
+    width: 280px;
+    height: 80px;
+    background: #fff;
+    /* overflow: hidden; */
+    border-radius: 2px;
+    box-shadow: 2px 3px 4px #000;
+}
+.desktop_notif > a {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    /* width: 100%; */
+    height: 100%;
+    padding-left: 70px;
+    text-decoration: none;
+    color: #696969;
+    overflow: hidden;
+}
+.desktop_notif > a span{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: 42px;
+    background-position: 50%;
+    border-right: 1px solid #e2e2e2;
+}
+.desktop_notif > a h3{
+    margin: 0;
+    font-size: 14px;
+    color: #2e85b1;
+    white-space: nowrap;
+    margin: 4px 0;
+    text-transform: uppercase;
+}
+.desktop_notif > a p{
+    margin: 0;
+    font-size: 12px;
+}
+.desktop_notif > i {
+    position: absolute;
+    z-index: 9;
+    left: 94%;
+    /* background: #fff; */
+    padding: 2px 6px;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    color: #000;
+}
+.desktop_notif:hover > i {
+    left: 93%;
+    opacity: 1;
+}
+
+.notifications_dimiss {
+    position: fixed;
+    right: 2%;
+    bottom: 62px;
+    width: 42px;
+    height: 14px;
+    cursor: pointer;
+}
+.notifications_dimiss i {
+    position: relative;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    display: block;
+}
+.notifications_dimiss i::after {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: block;
+    top: 8px;
+    left: 6px;
+}
+.notifications_dimiss i::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: block;
+    top: 4px;
+    left: 3px;
 }

@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>hz Browser</title>
-</head>
-<body>
-<h3>THIS IS AN APP WINDOW</h3>
-</body>
-</html>
+<div data-title="TITLE" class="browser_window">
+    <div class="browser_head">
+        <input type="text" title="">
+        <button type="button">GO</button>
+    </div>
+    <div class="browser_body">
+        <iframe src="" frameborder="0"></iframe>
+    </div>
+
+
+    <script>
+        $('.browser_head button').on('click', function(){
+            $('ifram').attr('src', $('.browser_head input').val());
+        })
+    </script>
+</div>
